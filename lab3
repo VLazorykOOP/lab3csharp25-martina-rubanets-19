@@ -1,0 +1,126 @@
+using System;
+using System.Linq;
+
+namespace Lab3CSharp
+{
+    internal class Program
+    {
+        static void Main(string[] args)
+        {
+            Console.WriteLine("Lab 3 CSharp");
+           task1();
+            //task2();
+        }
+
+        public static void task1()
+        {
+            int[,] rombs =
+            {
+                {5, 7, 1},
+                {4, 4, 2},
+                {6, 8, 3}
+            };
+
+            int squareCount = 0;
+            for (int i = 0; i < rombs.GetLength(0); i++)
+            {
+                int a = rombs[i, 0], d1 = rombs[i, 1], color = rombs[i, 2];
+                DisplayInfo(a, d1, color);
+                if (IsSquare(a, d1)) squareCount++;
+            }
+
+            Console.WriteLine($"Кількість квадратів: {squareCount}");
+        }
+
+        private static void DisplayInfo(int a, int d1, int color)
+        {
+            Console.WriteLine($"Сторона: {a}, Діагональ: {d1}, Колір: {color}");
+            Console.WriteLine($"Периметр: {Perimeter(a)}, Площа: {Area(a, d1):F2}, Квадрат: {IsSquare(a, d1)}");
+        }
+
+        private static int Perimeter(int a) => 4 * a;
+
+        private static double Area(int a, int d1) => (d1 * Math.Sqrt(4 * a * a - d1 * d1)) / 2;
+
+        private static bool IsSquare(int a, int d1) => d1 == a * Math.Sqrt(2);
+
+        public static void task2()
+        {
+            Animal[] animals =
+            {
+                new Mammal("Кіт", 3, true),
+                new Ungulate("Корова", 5, true, 4),
+                new Bird("Орел", 2, true),
+                new Mammal("Собака", 4, true),
+                new Ungulate("Олень", 6, true, 4)
+            };
+
+            Console.WriteLine("\nДо сортування:");
+            foreach (var animal in animals) animal.Show();
+
+            var sortedAnimals = animals.OrderBy(a => a.Age).ToArray();
+
+            Console.WriteLine("\nПісля сортування за віком:");
+            foreach (var animal in sortedAnimals) animal.Show();
+        }
+    }
+
+    abstract class Animal
+    {
+        public string Name { get; set; }
+        public int Age { get; set; }
+
+        protected Animal(string name, int age)
+        {
+            Name = name;
+            Age = age;
+        }
+
+        public abstract void Show();
+    }
+
+    class Mammal : Animal
+    {
+        public bool HasFur { get; set; }
+
+        public Mammal(string name, int age, bool hasFur) : base(name, age)
+        {
+            HasFur = hasFur;
+        }
+
+        public override void Show()
+        {
+            Console.WriteLine($"Ссавець: {Name}, Вік: {Age}, Має хутро: {HasFur}");
+        }
+    }
+
+    class Ungulate : Mammal
+    {
+        public int HoofCount { get; set; }
+
+        public Ungulate(string name, int age, bool hasFur, int hoofCount) : base(name, age, hasFur)
+        {
+            HoofCount = hoofCount;
+        }
+
+        public override void Show()
+        {
+            Console.WriteLine($"Парнокопитне: {Name}, Вік: {Age}, Кількість копит: {HoofCount}");
+        }
+    }
+
+    class Bird : Animal
+    {
+        public bool CanFly { get; set; }
+
+        public Bird(string name, int age, bool canFly) : base(name, age)
+        {
+            CanFly = canFly;
+        }
+
+        public override void Show()
+        {
+            Console.WriteLine($"Птах: {Name}, Вік: {Age}, Вміє літати: {CanFly}");
+        }
+    }
+}
